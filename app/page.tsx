@@ -95,7 +95,7 @@ export default function ModelGenerator() {
     // Simulate API call delay
     await new Promise((resolve) => setTimeout(resolve, 2000))
 
-    // Save the project to MongoDB
+    // Save the project to MongoDB for logged-in users
     if (user?.id) {
       const result = await saveProject({
         userId: user.id,
@@ -105,11 +105,12 @@ export default function ModelGenerator() {
       })
 
       if (result.success) {
+        // Show "Coming soon" message instead of success message
         toast({
-          title: "Model Generated!",
-          description: "Your project has been saved.",
+          title: "Coming Soon!",
+          description: "3D model generation feature is currently under development. Your prompt has been saved!",
         })
-        setPrompt("") // Clear prompt after successful generation and save
+        setPrompt("") // Clear prompt after successful save
       } else {
         toast({
           title: "Error",
@@ -126,9 +127,6 @@ export default function ModelGenerator() {
     }
 
     setIsGenerating(false)
-
-    // Here you would integrate with a 3D model generation API
-    console.log("Generating model for prompt:", prompt, "for user:", user?.fullName)
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
