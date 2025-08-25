@@ -7,7 +7,7 @@ import { OrbitControls, Environment, Html } from "@react-three/drei"
 import { Suspense, useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Loader2 } from "lucide-react"
+import { Loader2, Crown } from "lucide-react"
 import { useUser } from "@clerk/nextjs"
 import { ProfileDropdown } from "@/components/profile-dropdown"
 import { useRouter } from "next/navigation"
@@ -135,6 +135,10 @@ export default function ModelGenerator() {
     }
   }
 
+  const handleUpgradeClick = () => {
+    router.push("/pricing")
+  }
+
   // Get welcome message text
   const getWelcomeMessage = () => {
     if (!user) return ""
@@ -145,6 +149,20 @@ export default function ModelGenerator() {
 
   return (
     <div className="w-full h-screen bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
+      {/* Upgrade Button - Top Center */}
+      {mounted && isSignedIn && (
+        <div className="fixed top-4 sm:top-6 left-1/2 transform -translate-x-1/2 z-30">
+          <Button
+            onClick={handleUpgradeClick}
+            variant="outline"
+            className="bg-white/90 backdrop-blur-sm hover:bg-white border-gray-200 text-gray-700 hover:text-gray-900 px-4 py-2 rounded-full text-sm font-medium shadow-sm transition-all duration-200"
+          >
+            <Crown className="w-4 h-4 mr-2 text-yellow-500" />
+            Upgrade
+          </Button>
+        </div>
+      )}
+
       {/* Profile Icon - Upper Right Corner - Fixed positioning */}
       <div className="fixed top-4 sm:top-6 right-4 sm:right-6 z-30">
         <ProfileDropdown />
