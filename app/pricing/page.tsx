@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { Check, Crown, ArrowLeft, Plus, Minus } from "lucide-react"
+import { Check, ArrowLeft, Plus, Minus } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useUser } from "@clerk/nextjs"
 import { useState } from "react"
@@ -72,19 +72,8 @@ export default function PricingPage() {
           </Button>
         </div>
 
-        {/* Header */}
-        <div className="max-w-6xl mx-auto text-center mb-12">
-          <div className="flex items-center justify-center mb-4">
-            <Crown className="w-8 h-8 text-yellow-500 mr-3" />
-            <h1 className="text-4xl font-bold text-gray-900">Upgrade Your Experience</h1>
-          </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Unlock unlimited 3D model generation and premium features with our subscription plans.
-          </p>
-        </div>
-
         {/* Pricing Cards */}
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mt-6 mb-24">
           {/* Free Plan */}
           <Card className="relative">
             <CardHeader>
@@ -239,18 +228,18 @@ export default function PricingPage() {
       {/* Footer */}
       <footer className="bg-gray-50 border-t border-gray-200 py-12">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="flex justify-between items-start">
-            {/* Company Info - Left side */}
-            <div className="flex-shrink-0">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">3D Model Generator</h3>
+          <div className="flex flex-col items-center gap-10 md:flex-row md:items-start md:justify-between">
+            {/* Company Info - Left on desktop, centered on mobile */}
+            <div className="flex-shrink-0 text-center md:text-left">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 md:mb-4">3D Model Generator</h3>
               <p className="text-gray-600">Copyright © 2024. All rights reserved.</p>
             </div>
 
-            {/* Policies and Contact - Right side with gap */}
-            <div className="flex gap-16">
+            {/* Policies and Contact - stack and center on mobile, shift right on desktop */}
+            <div className="flex w-full md:w-auto flex-col sm:flex-row items-center md:items-start justify-center gap-8 md:gap-16 md:ml-auto">
               {/* Policies */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Policies</h3>
+              <div className="text-center md:text-left">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 md:mb-4">Policies</h3>
                 <div className="space-y-2">
                   <a href="#" className="block text-gray-600 hover:text-gray-900 transition-colors">
                     Privacy Policy
@@ -262,8 +251,8 @@ export default function PricingPage() {
               </div>
 
               {/* Contact */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Contact</h3>
+              <div className="text-center md:text-left">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 md:mb-4">Contact</h3>
                 <div className="space-y-2">
                   <a
                     href="mailto:support@3dmodelgen.com"

@@ -155,7 +155,7 @@ export default function ModelGenerator() {
           <Button
             onClick={handleUpgradeClick}
             variant="outline"
-            className="bg-white/90 backdrop-blur-sm hover:bg-white border-gray-200 text-gray-700 hover:text-gray-900 px-4 py-2 rounded-full text-sm font-medium shadow-sm transition-all duration-200"
+            className="bg-grey px-10 rounded-xl text-sm font-small"
           >
             <Crown className="w-4 h-4 mr-2 text-yellow-500" />
             Upgrade
