@@ -7,10 +7,13 @@ import { Check, ArrowLeft, Plus, Minus } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useUser } from "@clerk/nextjs"
 import { useState } from "react"
+import { useSubscription } from "@/contexts/subscription-context"
+import { toast } from "@/hooks/use-toast"
 
 export default function PricingPage() {
   const router = useRouter()
   const { isSignedIn } = useUser()
+  const { subscribe } = useSubscription()
   const [openFAQ, setOpenFAQ] = useState<string | null>(null)
 
   const handleBackClick = () => {
@@ -18,10 +21,16 @@ export default function PricingPage() {
   }
 
   const handleSubscribe = (plan: string) => {
-    // This would integrate with a payment processor like Stripe
-    console.log(`Subscribe to ${plan} plan`)
-    // For now, just show a placeholder message
-    alert(`${plan} plan subscription coming soon!`)
+    // Subscribe the user to the selected plan
+    subscribe(plan)
+    toast({
+      title: "Subscription Successful!",
+      description: `You've successfully subscribed to the ${plan} plan. You now have access to advanced features!`,
+    })
+    // Redirect back to the main page to see the new UI
+    setTimeout(() => {
+      router.push("/")
+    }, 2000)
   }
 
   const toggleFAQ = (faqId: string) => {
@@ -56,8 +65,7 @@ export default function PricingPage() {
     {
       id: "one-time-purchase",
       question: "Is it a one time purchase item?",
-      answer:
-        "Yes, this is a one-time purchase service.",
+      answer: "Yes, this is a one-time purchase service.",
     },
   ]
 
@@ -92,10 +100,6 @@ export default function PricingPage() {
                 <li className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3" />
                   <span>Basic model quality</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="w-5 h-5 text-green-500 mr-3" />
-                  <span>Standard export formats</span>
                 </li>
                 <li className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3" />

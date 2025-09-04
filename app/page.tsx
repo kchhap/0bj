@@ -10,9 +10,12 @@ import { Input } from "@/components/ui/input"
 import { Loader2, Crown } from "lucide-react"
 import { useUser } from "@clerk/nextjs"
 import { ProfileDropdown } from "@/components/profile-dropdown"
+import { ExportToolbar } from "@/components/export-toolbar"
+import { CustomizationSidebar } from "@/components/customization-sidebar"
 import { useRouter } from "next/navigation"
-import { saveProject } from "@/app/actions" // Import the server action
-import { toast } from "@/hooks/use-toast" // Import toast for notifications
+import { useSubscription } from "@/contexts/subscription-context"
+import { saveProject } from "@/app/actions"
+import { toast } from "@/hooks/use-toast"
 
 // Sample 3D Model Component (reduced size)
 function SampleModel() {
@@ -36,12 +39,16 @@ function SceneLoader() {
 }
 
 // 3D Scene Component
-function Scene() {
+function Scene({ zoomLevel, rotation }: { zoomLevel: number; rotation: { x: number; y: number } }) {
+  const scale = zoomLevel / 100
+  
   return (
     <>
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} />
-      <SampleModel />
+      <group scale={[scale, scale, scale]} rotation={[rotation.x, rotation.y, 0]}>
+        <SampleModel />
+      </group>
       <OrbitControls enablePan={false} enableZoom={true} enableRotate={true} minDistance={4} maxDistance={12} />
       <Environment preset="studio" />
     </>
@@ -54,7 +61,10 @@ export default function ModelGenerator() {
   const [showWelcome, setShowWelcome] = useState(false)
   const [isWelcomeVisible, setIsWelcomeVisible] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [zoomLevel, setZoomLevel] = useState(100)
+  const [rotation, setRotation] = useState({ x: 0, y: 0 })
   const { isSignedIn, user } = useUser()
+  const { isSubscribed } = useSubscription()
   const router = useRouter()
 
   // Prevent hydration mismatch
@@ -105,11 +115,18 @@ export default function ModelGenerator() {
       })
 
       if (result.success) {
-        // Show "Coming soon" message instead of success message
-        toast({
-          title: "Coming Soon!",
-          description: "3D model generation feature is currently under development. Your prompt has been saved!",
-        })
+        // Show different messages based on subscription status
+        if (isSubscribed) {
+          toast({
+            title: "Model Generated!",
+            description: "Your 3D model has been generated successfully. Use the customization tools to refine it!",
+          })
+        } else {
+          toast({
+            title: "Coming Soon!",
+            description: "3D model generation feature is currently under development. Your prompt has been saved!",
+          })
+        }
         setPrompt("") // Clear prompt after successful save
       } else {
         toast({
@@ -139,6 +156,41 @@ export default function ModelGenerator() {
     router.push("/pricing")
   }
 
+  const handleExport = () => {
+    toast({
+      title: "Export Started",
+      description: "Your 3D model is being prepared for download...",
+    })
+  }
+
+  const handleZoomChange = (newZoom: number) => {
+    setZoomLevel(newZoom)
+  }
+
+  const handleRotate = (axis: 'x' | 'y', direction: 'left' | 'right' | 'up' | 'down') => {
+    const rotationStep = Math.PI / 8 // 22.5 degrees per click
+    
+    setRotation(prev => {
+      const newRotation = { ...prev }
+      
+      if (axis === 'x') {
+        if (direction === 'up') {
+          newRotation.x += rotationStep
+        } else if (direction === 'down') {
+          newRotation.x -= rotationStep
+        }
+      } else if (axis === 'y') {
+        if (direction === 'left') {
+          newRotation.y += rotationStep
+        } else if (direction === 'right') {
+          newRotation.y -= rotationStep
+        }
+      }
+      
+      return newRotation
+    })
+  }
+
   // Get welcome message text
   const getWelcomeMessage = () => {
     if (!user) return ""
@@ -149,8 +201,15 @@ export default function ModelGenerator() {
 
   return (
     <div className="w-full h-screen bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
-      {/* Upgrade Button - Top Center */}
-      {mounted && isSignedIn && (
+      {/* Export Toolbar - Only show for subscribed users on desktop */}
+      {mounted && isSignedIn && isSubscribed && (
+        <div className="hidden md:block">
+          <ExportToolbar onExport={handleExport} onZoomChange={handleZoomChange} onRotate={handleRotate} />
+        </div>
+      )}
+
+      {/* Upgrade Button - Only show for non-subscribed users */}
+      {mounted && isSignedIn && !isSubscribed && (
         <div className="fixed top-4 sm:top-6 left-1/2 transform -translate-x-1/2 z-30">
           <Button
             onClick={handleUpgradeClick}
@@ -163,6 +222,7 @@ export default function ModelGenerator() {
         </div>
       )}
 
+
       {/* Profile Icon - Upper Right Corner - Fixed positioning */}
       <div className="fixed top-4 sm:top-6 right-4 sm:right-6 z-30">
         <ProfileDropdown />
@@ -171,7 +231,7 @@ export default function ModelGenerator() {
       {/* 3D Scene */}
       <Canvas camera={{ position: [0, 0, 7], fov: 50 }} className="w-full h-full">
         <Suspense fallback={<SceneLoader />}>
-          <Scene />
+          <Scene zoomLevel={zoomLevel} rotation={rotation} />
         </Suspense>
       </Canvas>
 
@@ -220,6 +280,13 @@ export default function ModelGenerator() {
           <div className="bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 text-gray-700 text-sm shadow-md">
             {getWelcomeMessage()}
           </div>
+        </div>
+      )}
+
+      {/* Customization Sidebar - Always show for subscribed users on desktop */}
+      {mounted && isSignedIn && isSubscribed && (
+        <div className="hidden md:block">
+          <CustomizationSidebar />
         </div>
       )}
     </div>
