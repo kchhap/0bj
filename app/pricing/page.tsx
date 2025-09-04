@@ -39,7 +39,7 @@ export default function PricingPage() {
       id: "what-will-get",
       question: "What will I get?",
       answer:
-        "You'll get access to our AI-powered 3D model generator, multiple export formats (OBJ, STL, FBX, GLTF), cloud storage for your models, and priority customer support.",
+        "You'll get access to our AI-powered 3D model generator, multiple export formats (OBJ, STL, FBX, GLTF) and priority customer support.",
     },
     {
       id: "future-updates",
@@ -51,13 +51,13 @@ export default function PricingPage() {
       id: "when-released",
       question: "When will it be released?",
       answer:
-        "The full 3D model generation feature is currently in development. Beta access will be available to Pro subscribers in Q2 2024, with full release planned for Q3 2024.",
+        "The full 3D model generation feature is currently in development. Beta access will be available to Pro subscribers.",
     },
     {
       id: "one-time-purchase",
       question: "Is it a one time purchase item?",
       answer:
-        "No, this is a subscription-based service. This allows us to continuously improve the AI models, add new features, and provide ongoing support and cloud infrastructure.",
+        "Yes, this is a one-time purchase service.",
     },
   ]
 
@@ -78,16 +78,16 @@ export default function PricingPage() {
           <Card className="relative">
             <CardHeader>
               <CardTitle className="text-2xl">Free</CardTitle>
-              <CardDescription>Perfect for getting started</CardDescription>
+              <CardDescription>Current Plan</CardDescription>
               <div className="text-3xl font-bold">
-                $0<span className="text-lg font-normal text-gray-500">/month</span>
+                $0<span className="text-sm font-normal text-gray-500"> USD</span>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
               <ul className="space-y-3">
                 <li className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3" />
-                  <span>5 models per month</span>
+                  <span>1 models per month</span>
                 </li>
                 <li className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3" />
@@ -102,9 +102,6 @@ export default function PricingPage() {
                   <span>Community support</span>
                 </li>
               </ul>
-              <Button className="w-full bg-transparent" variant="outline" disabled={!isSignedIn}>
-                {isSignedIn ? "Current Plan" : "Sign up to start"}
-              </Button>
             </CardContent>
           </Card>
 
@@ -117,14 +114,14 @@ export default function PricingPage() {
               <CardTitle className="text-2xl">Pro</CardTitle>
               <CardDescription>For serious creators</CardDescription>
               <div className="text-3xl font-bold">
-                $19<span className="text-lg font-normal text-gray-500">/month</span>
+                $19<span className="text-sm font-normal text-gray-500"> USD</span>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
               <ul className="space-y-3">
                 <li className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3" />
-                  <span>100 models per month</span>
+                  <span>Unlimited models</span>
                 </li>
                 <li className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3" />
@@ -148,7 +145,7 @@ export default function PricingPage() {
                 onClick={() => handleSubscribe("Pro")}
                 disabled={!isSignedIn}
               >
-                {isSignedIn ? "Subscribe to Pro" : "Sign up to subscribe"}
+                {isSignedIn ? "Subscribe" : "Sign up to subscribe"}
               </Button>
             </CardContent>
           </Card>
@@ -159,7 +156,7 @@ export default function PricingPage() {
               <CardTitle className="text-2xl">Enterprise</CardTitle>
               <CardDescription>For teams and businesses</CardDescription>
               <div className="text-3xl font-bold">
-                $99<span className="text-lg font-normal text-gray-500">/month</span>
+                $29<span className="text-sm font-normal text-gray-500"> USD</span>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -182,7 +179,7 @@ export default function PricingPage() {
                 </li>
                 <li className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3" />
-                  <span>Team collaboration</span>
+                  <span>Cloud support</span>
                 </li>
               </ul>
               <Button
@@ -191,7 +188,7 @@ export default function PricingPage() {
                 onClick={() => handleSubscribe("Enterprise")}
                 disabled={!isSignedIn}
               >
-                {isSignedIn ? "Contact Sales" : "Sign up to contact"}
+                {isSignedIn ? "Contact" : "Sign up to contact"}
               </Button>
             </CardContent>
           </Card>
@@ -231,7 +228,7 @@ export default function PricingPage() {
           <div className="flex flex-col items-center gap-10 md:flex-row md:items-start md:justify-between">
             {/* Company Info - Left on desktop, centered on mobile */}
             <div className="flex-shrink-0 text-center md:text-left">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2 md:mb-4">3D Model Generator</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 md:mb-4">Obj - 3D Model Generator</h3>
               <p className="text-gray-600">Copyright © 2024. All rights reserved.</p>
             </div>
 
@@ -255,16 +252,16 @@ export default function PricingPage() {
                 <h3 className="text-lg font-semibold text-gray-900 mb-2 md:mb-4">Contact</h3>
                 <div className="space-y-2">
                   <a
-                    href="mailto:support@3dmodelgen.com"
+                    href="https://github.com/kchhap"
                     className="block text-gray-600 hover:text-gray-900 transition-colors"
                   >
-                    Email
+                    Github
                   </a>
                   <a
-                    href="https://twitter.com/3dmodelgen"
+                    href="https://linkedin.com/in/ankitkachhap"
                     className="block text-gray-600 hover:text-gray-900 transition-colors"
                   >
-                    Twitter
+                    LinkedIn
                   </a>
                 </div>
               </div>
