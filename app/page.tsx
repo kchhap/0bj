@@ -7,13 +7,12 @@ import { OrbitControls, Environment, Html } from "@react-three/drei"
 import { Suspense, useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Loader2, Crown } from "lucide-react"
+import { Loader2 } from "lucide-react"
 import { useUser } from "@clerk/nextjs"
 import { ProfileDropdown } from "@/components/profile-dropdown"
 import { ExportToolbar } from "@/components/export-toolbar"
 import { CustomizationSidebar } from "@/components/customization-sidebar"
 import { useRouter } from "next/navigation"
-import { useSubscription } from "@/contexts/subscription-context"
 import { saveProject } from "@/app/actions"
 import { toast } from "@/hooks/use-toast"
 
@@ -64,7 +63,6 @@ export default function ModelGenerator() {
   const [zoomLevel, setZoomLevel] = useState(100)
   const [rotation, setRotation] = useState({ x: 0, y: 0 })
   const { isSignedIn, user } = useUser()
-  const { isSubscribed } = useSubscription()
   const router = useRouter()
 
   // Prevent hydration mismatch
@@ -115,18 +113,10 @@ export default function ModelGenerator() {
       })
 
       if (result.success) {
-        // Show different messages based on subscription status
-        if (isSubscribed) {
-          toast({
-            title: "Model Generated!",
-            description: "Your 3D model has been generated successfully. Use the customization tools to refine it!",
-          })
-        } else {
-          toast({
-            title: "Coming Soon!",
-            description: "3D model generation feature is currently under development. Your prompt has been saved!",
-          })
-        }
+        toast({
+          title: "Model Generated!",
+          description: "Your 3D model has been generated successfully. Use the customization tools to refine it!",
+        })
         setPrompt("") // Clear prompt after successful save
       } else {
         toast({
@@ -152,9 +142,6 @@ export default function ModelGenerator() {
     }
   }
 
-  const handleUpgradeClick = () => {
-    router.push("/pricing")
-  }
 
   const handleExport = () => {
     toast({
@@ -201,24 +188,10 @@ export default function ModelGenerator() {
 
   return (
     <div className="w-full h-screen bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
-      {/* Export Toolbar - Only show for subscribed users on desktop */}
-      {mounted && isSignedIn && isSubscribed && (
+      {/* Export Toolbar - Show for all signed-in users on desktop */}
+      {mounted && isSignedIn && (
         <div className="hidden md:block">
           <ExportToolbar onExport={handleExport} onZoomChange={handleZoomChange} onRotate={handleRotate} />
-        </div>
-      )}
-
-      {/* Upgrade Button - Only show for non-subscribed users */}
-      {mounted && isSignedIn && !isSubscribed && (
-        <div className="fixed top-4 sm:top-6 left-1/2 transform -translate-x-1/2 z-30">
-          <Button
-            onClick={handleUpgradeClick}
-            variant="outline"
-            className="bg-grey px-10 rounded-xl text-sm font-small"
-          >
-            <Crown className="w-4 h-4 mr-2 text-yellow-500" />
-            Upgrade
-          </Button>
         </div>
       )}
 
@@ -283,8 +256,8 @@ export default function ModelGenerator() {
         </div>
       )}
 
-      {/* Customization Sidebar - Always show for subscribed users on desktop */}
-      {mounted && isSignedIn && isSubscribed && (
+      {/* Customization Sidebar - Show for all signed-in users on desktop */}
+      {mounted && isSignedIn && (
         <div className="hidden md:block">
           <CustomizationSidebar />
         </div>
